@@ -1,0 +1,19 @@
+name: Action Continuous Integration Workflow
+run-name: Workflow to be executed on every push to any open pull request.
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  action-ci-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.10'
+      - name: CI
+        run: |
+          make ci

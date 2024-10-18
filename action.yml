@@ -1,15 +1,45 @@
-name: 'Github action for '
-description: 'Greet someone and record the time'
+name: Github action to find unsupported dependencies using package-maintenance.dev
+description: |-
+  This action finds unsupported dependencies in your project using package-maintenance.dev.
+  Found dependencies will be printed in the logs or result to failed execution depending on the action configuration.
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  github-repository:
+    description: |-
+      Repository full name in the format `owner/repo`. This value can be retrieved from the GitHub context `${{ github.repository }}`
     required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  github-token:
+    description: |-
+      GitHub token to access the GitHub API. This value can be retrieved from the GitHub secrets context `${{ secrets.GITHUB_TOKEN }}`
+    required: false
+  sbom-ignore-packages:
+    description: |-
+      List of packages to ignore. The action will not check the versions of the packages in this list.
+      The value is optional and the default value is an empty list, that means all packages will be checked.
+      The list should be in format of multiline string with each line in PURL format without version. For example:
+      ```
+      pkg:npm/express
+      pkg:pypi/django
+      ```
+      Version is not required in this case and will be ignored if provided.
+      The action will check only the package id and ecosystem.
+    required: false
+    default: ''
+  sbom-scores-thresholds:
+    description: |-
+      The minimum scores threshold for the packages. The action will fail if the score of a package is below this threshold.
+      This value format is a list of key-value pairs in the format of `metric:threshold`.
+      For example: `source.commit.frequency:B,binary.release.recency:A`. The value is optional and the default value is `*:B`.
+    required: false
+    default: '*:B'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.who-to-greet }}
+    - --github_repository
+    - ${{ inputs.github-repository }}
+    - --github_token
+    - ${{ inputs.github-token }}
+    - --sbom_ignore_packages
+    - ${{ inputs.sbom-ignore-packages }}
+    - --sbom_scores_thresholds
+    - ${{ inputs.sbom-scores-thresholds }}
