@@ -2,29 +2,31 @@ import pytest
 import sys
 from unittest.mock import patch
 
-from action.main import parse_sbom_scores_thresholds, parse_arguments
+from action.main import parse_arguments
+from action.models.action_arguments import PackageMetric, PackageMetricScore
+from action.models.parse_action_arguments import _parse_packages_scores_thresholds
 
 
-def test_parse_sbom_scores_thresholds():
-    thresholds_str = 'source.commit.frequency:B,binary.release.recency:A'
+def test_parse_packages_scores_thresholds():
+    thresholds_str = 'source_commit_frequency:B,binary_release_recency:A'
     expected_dict = {
-        'source.commit.frequency': 'B',
-        'binary.release.recency': 'A'
+        PackageMetric.source_commit_frequency: PackageMetricScore.B,
+        PackageMetric.BINARY_RELEASE_RECENCY: PackageMetricScore.A
     }
-    result = parse_sbom_scores_thresholds(thresholds_str)
+    result = _parse_packages_scores_thresholds(thresholds_str)
     assert result == expected_dict
 
-def test_invalid_sbom_scores_thresholds():
+def test_invalid_packages_scores_thresholds():
     with pytest.raises(ValueError, match="Both key and value must be non-empty."):
-        parse_sbom_scores_thresholds('source.commit.frequency:,binary.release.recency:A')
+        _parse_packages_scores_thresholds('source_commit_frequency:,binary_release_recency:A')
 
 def test_parse_arguments():
     test_args = [
         'script_name',
         '--github_repository', 'owner/repo',
         '--github_token', 'testtoken',
-        '--sbom_ignore_packages', 'pkg1\npkg2\npkg3',
-        '--sbom_scores_thresholds', 'source.commit.frequency:B,binary.release.recency:A'
+        '--packages_ignore', 'pkg1\npkg2\npkg3',
+        '--packages_scores_thresholds', 'source_commit_frequency:B,binary_release_recency:A'
     ]
 
     with patch.object(sys, 'argv', test_args):
@@ -33,11 +35,11 @@ def test_parse_arguments():
         assert owner.strip() == 'owner'
         assert repo.strip() == 'repo'
         assert args.github_token == 'testtoken'
-        assert args.sbom_ignore_packages == 'pkg1\npkg2\npkg3'
-        sbom_scores_thresholds = parse_sbom_scores_thresholds(args.sbom_scores_thresholds)
-        assert sbom_scores_thresholds == {
-            'source.commit.frequency': 'B',
-            'binary.release.recency': 'A'
+        assert args.packages_ignore == 'pkg1\npkg2\npkg3'
+        packages_scores_thresholds = _parse_packages_scores_thresholds(args.packages_scores_thresholds)
+        assert packages_scores_thresholds == {
+            PackageMetric.source_commit_frequency: PackageMetricScore.B,
+            PackageMetric.BINARY_RELEASE_RECENCY: PackageMetricScore.A
         }
 
 def test_missing_required_argument():
@@ -56,7 +58,7 @@ def test_no_ignore_packages():
         'script_name',
         '--github_repository', 'owner/repo',
         '--github_token', 'testtoken',
-        '--sbom_scores_thresholds', 'source.commit.frequency:B,binary.release.recency:A'
+        '--packages_scores_thresholds', 'source_commit_frequency:B,binary_release_recency:A'
     ]
 
     with patch.object(sys, 'argv', test_args):
@@ -66,11 +68,11 @@ def test_no_ignore_packages():
         assert owner.strip() == 'owner'
         assert repo.strip() == 'repo'
         assert args.github_token == 'testtoken'
-        assert args.sbom_ignore_packages is None
-        sbom_scores_thresholds = parse_sbom_scores_thresholds(args.sbom_scores_thresholds)
-        assert sbom_scores_thresholds == {
-            'source.commit.frequency': 'B',
-            'binary.release.recency': 'A'
+        assert args.packages_ignore is None
+        packages_scores_thresholds = _parse_packages_scores_thresholds(args.packages_scores_thresholds)
+        assert packages_scores_thresholds == {
+            PackageMetric.source_commit_frequency: PackageMetricScore.B,
+            PackageMetric.BINARY_RELEASE_RECENCY: PackageMetricScore.A
         }
 
 def test_multiline_ignore_packages():
@@ -78,15 +80,15 @@ def test_multiline_ignore_packages():
         'script_name',
         '--github_repository', 'owner/repo',
         '--github_token', 'testtoken',
-        '--sbom_ignore_packages', 'pkg1\npkg2\npkg3'
+        '--packages_ignore', 'pkg1\npkg2\npkg3'
     ]
 
     with patch.object(sys, 'argv', test_args):
         args = parse_arguments()
-        ignore_packages = args.sbom_ignore_packages.split('\n')
+        ignore_packages = args.packages_ignore.split('\n')
 
         owner, repo = args.github_repository.split('/')
         assert owner.strip() == 'owner'
         assert repo.strip() == 'repo'
         assert ignore_packages == ['pkg1', 'pkg2', 'pkg3']
-        assert args.sbom_scores_thresholds is None
+        assert args.packages_scores_thresholds is None

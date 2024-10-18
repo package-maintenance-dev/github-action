@@ -11,7 +11,7 @@ inputs:
     description: |-
       GitHub token to access the GitHub API. This value can be retrieved from the GitHub secrets context `${{ secrets.GITHUB_TOKEN }}`
     required: false
-  sbom-ignore-packages:
+  packages-ignore:
     description: |-
       List of packages to ignore. The action will not check the versions of the packages in this list.
       The value is optional and the default value is an empty list, that means all packages will be checked.
@@ -24,7 +24,7 @@ inputs:
       The action will check only the package id and ecosystem.
     required: false
     default: ''
-  sbom-scores-thresholds:
+  packages-scores-thresholds:
     description: |-
       The minimum scores threshold for the packages. The action will fail if the score of a package is below this threshold.
       This value format is a list of key-value pairs in the format of `metric:threshold`.
@@ -39,7 +39,7 @@ runs:
     - ${{ inputs.github-repository }}
     - --github_token
     - ${{ inputs.github-token }}
-    - --sbom_ignore_packages
-    - ${{ inputs.sbom-ignore-packages }}
-    - --sbom_scores_thresholds
-    - ${{ inputs.sbom-scores-thresholds }}
+    - --packages_ignore
+    - ${{ inputs.packages-ignore }}
+    - --packages_scores_thresholds
+    - ${{ inputs.packages-scores-thresholds }}
