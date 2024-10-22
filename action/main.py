@@ -1,6 +1,6 @@
 import argparse
 
-from action.arguments.parse_action_arguments import parse_action_arguments
+from action.action import perform_action
 
 
 def parse_arguments():
@@ -35,7 +35,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    parse_action_arguments(args)
+    perform_action(args)
 
 
 if __name__ == "__main__":

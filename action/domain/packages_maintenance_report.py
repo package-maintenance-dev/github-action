@@ -39,6 +39,27 @@ class PackagesMaintenanceReport:
         self._packages_maintenance = packages_maintenance
         self._packages_scores_thresholds = packages_scores_thresholds
 
+    def render(self) -> str:
+        """
+        Renders the report as a markdown string.
+        """
+        report = ""
+        missing_data_packages = self.missing_data_packages()
+        if missing_data_packages:
+            report += "## Missing data packages\n"
+            for missing_data_package in missing_data_packages:
+                report += f"- {missing_data_package}\n"
+            report += "\n"
+
+        below_threshold_packages = self.below_threshold_packages()
+        if below_threshold_packages:
+            report += "## Below threshold packages\n"
+            for package, metric, package_metric in below_threshold_packages:
+                report += f"- {package} - {metric}: {package_metric.score}\n"
+            report += "\n"
+
+        return report
+
     def missing_data_packages(self) -> List["PackageURL"]:
         """
         Returns a string representation of missing data packages.
@@ -91,21 +112,35 @@ class PackagesMaintenanceReport:
     def _get_package_metric(
         self, package: PackageMetadata, metric: PackageMetric
     ) -> Optional[MaintenanceMetric]:
-        source_present = package.source_repository is not None
+        source_repository = package.source_repository
         match metric:
             case PackageMetric.binary_release_recency:
                 return package.binary_repository.release_recency
-            case PackageMetric.source_commit_frequency if source_present:
-                return package.source_repository.commits_frequency
-            case PackageMetric.source_commit_recency if source_present:
-                return package.source_repository.commits_recency
-            case PackageMetric.issues_lifetime if source_present:
-                return package.source_repository.issues_lifetime
-            case PackageMetric.issues_open_percentage if source_present:
-                return package.source_repository.issues_open_percentage
-            case PackageMetric.pull_requests_lifetime if source_present:
-                return package.source_repository.pull_requests_lifetime
-            case PackageMetric.pull_requests_open_percentage if source_present:
-                return package.source_repository.pull_requests_open_percentage
+            case PackageMetric.source_commit_frequency:
+                return (
+                    source_repository.commits_frequency if source_repository else None
+                )
+            case PackageMetric.source_commit_recency:
+                return source_repository.commits_recency if source_repository else None
+            case PackageMetric.issues_lifetime:
+                return source_repository.issues_lifetime if source_repository else None
+            case PackageMetric.issues_open_percentage:
+                return (
+                    source_repository.issues_open_percentage
+                    if source_repository
+                    else None
+                )
+            case PackageMetric.pull_requests_lifetime:
+                return (
+                    source_repository.pull_requests_lifetime
+                    if source_repository
+                    else None
+                )
+            case PackageMetric.pull_requests_open_percentage:
+                return (
+                    source_repository.pull_requests_open_percentage
+                    if source_repository
+                    else None
+                )
             case _:
                 return None
