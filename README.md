@@ -12,7 +12,7 @@ Please, find more information about Dependency Graph in the following GitHub doc
 
 This action requires the following inputs:
 
-#### `github_repository`
+#### `github-repository`
 
 Repository full name in the format `owner/repo`. This value can be retrieved from the GitHub context
 `${{ github.repository }}`.
@@ -22,7 +22,7 @@ Please, find more information about GitHub context in the following GitHub docum
 
 **Required** The repository full name in the format `owner/repo`. No default value.
 
-#### `github_token`
+#### `github-token`
 
 GitHub token to access the GitHub API. This value can be retrieved from the GitHub secrets context
 `${{ secrets.GITHUB_TOKEN }}`.
@@ -35,11 +35,11 @@ Please, find more information about GitHub context in the following GitHub docum
 
 **Optional** The GitHub token to access the GitHub API. No default value.
 
-#### `sbom_ignore_packages`
+#### `packages-ignore`
 
 List of packages to ignore. The action will not check the versions of the packages in this list. The value is optional
-and the default value is an empty list.
-The list should be in format of multiline string with each line in PURL format without version. For example:
+and the default value is an empty list, that means all packages will be checked.
+The list should be in format of multiline string with each line in [PURL](https://github.com/package-url/purl-spec) format without version. For example:
 
 ```
 pkg:npm/express
@@ -51,7 +51,7 @@ ecosystem.
 
 **Optional** List of packages to ignore. The default value is an empty list.
 
-#### `sbom_score_threshold`
+#### `packages-scores-thresholds`
 
 [package-maintenance.dev](https://package-maintenance.dev) index as such does not provide a clear bar which packages to
 be considered as unsupported. Instead, it supplies a data to make an informed decision.
@@ -61,14 +61,21 @@ following [documentation](https://package-maintenance.dev/docs/index).
 This value format is a list of key-value pairs in the format of `metric:threshold`. For example:
 
 ```
-score_threshold: "source.commit.frequency:B,binary.release.recency:A"
+packages-scores-thresholds: "source_commit_frequency:B,binary_release_recency:A"
 ```
 
 To set threshold for all metrics, use asterisk `*` as a key. For example:
 
 ```
-score_threshold: "*:B"
+packages-scores-thresholds: "*:B"
 ```
+
+To set no threshold set the value to an empty string. For example:
+
+```
+packages-scores-thresholds: ""
+```
+In this case, the action will not check the score of the packages and just will output the complete audit information.
 
 **Optional** The score threshold for the package. The default value is `*:B`.
 
@@ -86,10 +93,10 @@ The following example shows how to use the action in a workflow:
 ```yaml
 uses: package-maintenance-dev/github-action@v0.0.1
 with:
-  github_repository: ${{ github.repository }}
-  github_token: ${{ secrets.GITHUB_TOKEN }}
-  sbom_ignore_packages: |
+  github-repository: ${{ github.repository }}
+  github-token: ${{ secrets.GITHUB_TOKEN }}
+  packages-ignore: |
     pkg:npm/express
     pkg:pypi/django
-  sbom_score_threshold: "source.commit.frequency:B,binary.release.recency:A"
+  packages-scores-thresholds: "source.commit.frequency:B,binary.release.recency:A"
 ```
