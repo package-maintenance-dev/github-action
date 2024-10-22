@@ -5,11 +5,11 @@ description: |-
 inputs:
   github-repository:
     description: |-
-      Repository full name in the format `owner/repo`. This value can be retrieved from the GitHub context `${{ github.repository }}`
+      Repository full name in the format `owner/repo`. This value can be retrieved from the GitHub context.
     required: true
   github-token:
     description: |-
-      GitHub token to access the GitHub API. This value can be retrieved from the GitHub secrets context `${{ secrets.GITHUB_TOKEN }}`
+      GitHub token to access the GitHub API. This value can be retrieved from the GitHub secrets context.
     required: false
   packages-ignore:
     description: |-
