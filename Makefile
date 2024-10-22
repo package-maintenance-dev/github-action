@@ -83,3 +83,9 @@ test: pytest
 # Should be run on any push to any branch.
 #
 ci: setup lint build test
+
+#
+# Pre-commit workflow: format, lint, build, test
+# Should be run on locally before pushing changes to catch easy to fix bugs locally.
+#
+pre-commit: format lint build test

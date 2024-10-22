@@ -5,11 +5,13 @@ Module containing the function to parse the action arguments into the correspond
 from typing import Optional
 
 import argparse
+from packageurl import PackageURL
 
-from action.models.action_arguments import (
+from action.arguments.action_arguments import (
     PackageMetricScore,
     PackageMetric,
     ActionArguments,
+    default_packages_scores_thresholds,
 )
 
 
@@ -20,7 +22,6 @@ def parse_action_arguments(args: argparse.Namespace) -> ActionArguments:
     packages_scores_thresholds = _parse_packages_scores_thresholds(
         args.packages_scores_thresholds
     )
-
     action_arguments = ActionArguments(
         github_repository_owner=github_owner,
         github_repository_name=github_repo,
@@ -43,19 +44,28 @@ def _parse_github_repository(args: argparse.Namespace) -> tuple[str, str]:
     return owner, repo
 
 
-def _parse_packages_ignore(args: argparse.Namespace) -> Optional[list[str]]:
-    if args.packages_ignore:
-        packages_ignore = args.packages_ignore.split("\n")
-    else:
-        packages_ignore = None
+def _parse_packages_ignore(args: argparse.Namespace) -> list[PackageURL]:
+    if args.packages_ignore is None:
+        return []
+
+    packages_ignore = []
+    for package in args.packages_ignore.split("\n"):
+        package = package.strip()
+        if not package:
+            continue
+        try:
+            packages_ignore.append(PackageURL.from_string(package))
+        except ValueError:
+            raise ValueError(f"Invalid package URL: {package}")
+
     return packages_ignore
 
 
 def _parse_packages_scores_thresholds(
     thresholds: Optional[str],
-) -> Optional[dict[PackageMetric, PackageMetricScore]]:
+) -> dict[PackageMetric, PackageMetricScore]:
     if not thresholds:
-        return None
+        return default_packages_scores_thresholds()
 
     thresholds_dict = {}
     for entry in thresholds.split(","):

@@ -39,7 +39,7 @@ Please, find more information about GitHub context in the following GitHub docum
 
 List of packages to ignore. The action will not check the versions of the packages in this list. The value is optional
 and the default value is an empty list, that means all packages will be checked.
-The list should be in format of multiline string with each line in PURL format without version. For example:
+The list should be in format of multiline string with each line in [PURL](https://github.com/package-url/purl-spec) format without version. For example:
 
 ```
 pkg:npm/express

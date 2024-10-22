@@ -3,15 +3,15 @@ import sys
 from unittest.mock import patch
 
 from action.main import parse_arguments
-from action.models.action_arguments import PackageMetric, PackageMetricScore
-from action.models.parse_action_arguments import _parse_packages_scores_thresholds
+from action.arguments.action_arguments import PackageMetric, PackageMetricScore
+from action.arguments.parse_action_arguments import _parse_packages_scores_thresholds
 
 
 def test_parse_packages_scores_thresholds():
     thresholds_str = 'source_commit_frequency:B,binary_release_recency:A'
     expected_dict = {
         PackageMetric.source_commit_frequency: PackageMetricScore.B,
-        PackageMetric.BINARY_RELEASE_RECENCY: PackageMetricScore.A
+        PackageMetric.binary_release_recency: PackageMetricScore.A
     }
     result = _parse_packages_scores_thresholds(thresholds_str)
     assert result == expected_dict
@@ -39,7 +39,7 @@ def test_parse_arguments():
         packages_scores_thresholds = _parse_packages_scores_thresholds(args.packages_scores_thresholds)
         assert packages_scores_thresholds == {
             PackageMetric.source_commit_frequency: PackageMetricScore.B,
-            PackageMetric.BINARY_RELEASE_RECENCY: PackageMetricScore.A
+            PackageMetric.binary_release_recency: PackageMetricScore.A
         }
 
 def test_missing_required_argument():
@@ -72,7 +72,7 @@ def test_no_ignore_packages():
         packages_scores_thresholds = _parse_packages_scores_thresholds(args.packages_scores_thresholds)
         assert packages_scores_thresholds == {
             PackageMetric.source_commit_frequency: PackageMetricScore.B,
-            PackageMetric.BINARY_RELEASE_RECENCY: PackageMetricScore.A
+            PackageMetric.binary_release_recency: PackageMetricScore.A
         }
 
 def test_multiline_ignore_packages():

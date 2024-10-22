@@ -4,6 +4,8 @@ import requests
 
 from action.clients.package_maintenance.model import PackagesRequest, PackagesResponse
 
+API_HOST = "https://package-maintenance-03eac526c607.herokuapp.com"
+
 
 @typing.no_type_check
 def fetch_packages(payload: PackagesRequest) -> PackagesResponse:
@@ -19,7 +21,7 @@ def fetch_packages(payload: PackagesRequest) -> PackagesResponse:
     Raises:
         Exception: If the API returns any non success status code.
     """
-    url = "https://api.example.com/api/v0/packages"
+    url = f"{API_HOST}/api/v0/packages"
     headers = {"Content-Type": "application/json"}
 
     response = requests.post(url, json=payload.model_dump_json(), headers=headers)

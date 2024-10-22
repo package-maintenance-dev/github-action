@@ -1,6 +1,6 @@
 import argparse
 
-from action.models.parse_action_arguments import parse_action_arguments
+from action.arguments.parse_action_arguments import parse_action_arguments
 
 
 def parse_arguments():
