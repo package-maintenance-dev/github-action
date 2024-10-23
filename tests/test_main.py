@@ -2,7 +2,7 @@ import pytest
 import sys
 from unittest.mock import patch
 
-from action.main import parse_arguments
+from main import parse_arguments
 from action.arguments.action_arguments import PackageMetric, PackageMetricScore
 from action.arguments.parse_action_arguments import _parse_packages_scores_thresholds
 
