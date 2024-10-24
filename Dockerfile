@@ -1,4 +1,5 @@
 FROM python:3.11-bookworm
-COPY . /
+WORKDIR /github/workspace/
+COPY . /github/workspace/
 RUN make install-dependencies
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["python", "/github/workspace/main.py"]
