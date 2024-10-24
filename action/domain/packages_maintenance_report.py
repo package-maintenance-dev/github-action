@@ -8,6 +8,8 @@ from action.arguments.action_arguments import (
     ActionArguments,
 )
 from action.clients.package_maintenance.model import PackageMetadata, MaintenanceMetric
+from action.domain.commons import package_url_to_repository_id
+from action.utils.markdown_document import MarkdownDocument
 
 
 class PackagesMaintenanceReport:
@@ -43,22 +45,55 @@ class PackagesMaintenanceReport:
         """
         Renders the report as a markdown string.
         """
-        report = ""
+        report = MarkdownDocument()
         missing_data_packages = self.missing_data_packages()
         if missing_data_packages:
-            report += "## Missing data packages\n"
-            for missing_data_package in missing_data_packages:
-                report += f"- {missing_data_package}\n"
-            report += "\n"
+            report.heading("Missing data packages", level=2)
+            report.table(
+                headers=["Type", "Namespace", "Name"],
+                rows=[
+                    [package.type, package.namespace or "-", package.name]
+                    for package in missing_data_packages
+                ],
+            )
+
+        report.text("\n")
 
         below_threshold_packages = self.below_threshold_packages()
         if below_threshold_packages:
-            report += "## Below threshold packages\n"
-            for package, metric, package_metric in below_threshold_packages:
-                report += f"- {package} - {metric}: {package_metric.score}\n"
-            report += "\n"
+            report.heading("Below threshold packages", level=2)
+            report.table(
+                headers=[
+                    "Type",
+                    "Id",
+                    "Latest version",
+                    "Binary URL",
+                    "Source URL",
+                    "Metric",
+                    "Score",
+                    "Value",
+                ],
+                rows=[
+                    [
+                        package.binary_repository.type,
+                        package.binary_repository.id,
+                        package.binary_repository.latest_version,
+                        package.binary_repository.url,
+                        (
+                            package.source_repository.url
+                            if package.source_repository
+                            else "-"
+                        ),
+                        metric.name,
+                        package_metric.score,
+                        str(package_metric.value),
+                    ]
+                    for package, metric, package_metric in below_threshold_packages
+                ],
+            )
 
-        return report
+        content = report.content
+        return content
 
     def missing_data_packages(self) -> List["PackageURL"]:
         """
@@ -74,9 +109,15 @@ class PackagesMaintenanceReport:
             )
 
         missing_data_packages = []
-        for package in self._packages:
-            if (package.type, package.name) not in packages_maintenance_ids:
-                missing_data_packages.append(package)
+        for package_url in self._packages:
+            binary_repository_type_id = package_url_to_repository_id(package_url)
+            if binary_repository_type_id:
+                binary_repository_type, binary_repository_id = binary_repository_type_id
+                if (
+                    binary_repository_type,
+                    binary_repository_id,
+                ) not in packages_maintenance_ids:
+                    missing_data_packages.append(package_url)
         return missing_data_packages
 
     def below_threshold_packages(

@@ -10,9 +10,8 @@ from action.clients.package_maintenance.model import (
     PackagesResponse,
     PackageMetadata,
 )
+from action.domain.commons import package_url_to_repository_id
 from action.utils.list_utils import grouped
-
-MAVEN_PACKAGE_TYPE = "maven"
 
 # package-maintenance.dev API has a limit of 100 packages per request. Hence, we need to split the list of packages
 # into chunks of 100 packages each.
@@ -46,22 +45,18 @@ class PackagesMaintenanceRetriever:
     ) -> List[PackageMetadata]:
         packages: List[PackageRequest] = []
         for package_url in packages_urls:
-            match package_url.type:
-                case package_type if package_type == MAVEN_PACKAGE_TYPE:
-                    package = self._maven_package_request(package_url)
-                    packages.append(package)
-                case _:
-                    logger.info(
-                        f"Package '{package_url}' has an unsupported type '{package_url.type}'. Skipping..."
-                    )
+            binary_repository_type_id = package_url_to_repository_id(package_url)
+            if binary_repository_type_id:
+                binary_repository_type, binary_repository_id = binary_repository_type_id
+                package = PackageRequest(
+                    binary_repository_type=binary_repository_type,
+                    binary_repository_id=binary_repository_id,
+                )
+                packages.append(package)
+            else:
+                logger.info(
+                    f"Package '{package_url}' has an unsupported type '{package_url.type}'. Skipping..."
+                )
         packages_request = PackagesRequest(packages=packages)
         response: PackagesResponse = fetch_packages(packages_request)
         return response.packages
-
-    def _maven_package_request(self, package_url):
-        binary_repository_id = f"{package_url.namespace}:{package_url.name}"
-        package = PackageRequest(
-            binary_repository_type=MAVEN_PACKAGE_TYPE,
-            binary_repository_id=binary_repository_id,
-        )
-        return package

@@ -68,6 +68,14 @@ build-action-docker:
 build: build-action-docker
 
 #
+# Run examples: run action on example repositories
+#
+run-action-maven-example:
+	python main.py --github_repository package-maintenance-dev/github-action-maven-example
+
+run-examples: run-action-maven-example
+
+#
 # Test: test action
 #
 
