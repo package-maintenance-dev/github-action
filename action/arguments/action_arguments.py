@@ -21,10 +21,6 @@ def default_packages_scores_thresholds():
         PackageMetric.binary_release_recency: default_score_threshold,
         PackageMetric.source_commit_frequency: default_score_threshold,
         PackageMetric.source_commit_recency: default_score_threshold,
-        PackageMetric.issues_lifetime: default_score_threshold,
-        PackageMetric.issues_open_percentage: default_score_threshold,
-        PackageMetric.pull_requests_lifetime: default_score_threshold,
-        PackageMetric.pull_requests_open_percentage: default_score_threshold,
     }
 
 
