@@ -5,5 +5,5 @@ COPY main.py /github/workspace/main.py
 COPY requirements.txt /github/workspace/requirements.txt
 COPY action /github/workspace/action
 
-RUN make install-dependencies
+RUN pip install -r requirements.txt
 ENTRYPOINT ["python", "/github/workspace/main.py"]
