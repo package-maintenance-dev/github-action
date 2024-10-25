@@ -92,8 +92,8 @@ class PackagesMaintenanceReport:
                 ],
             )
 
-        content = report.content
-        return content
+        html = report.render_html()
+        return html
 
     def missing_data_packages(self) -> List["PackageURL"]:
         """
