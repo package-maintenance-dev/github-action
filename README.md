@@ -12,16 +12,6 @@ Please, find more information about Dependency Graph in the following GitHub doc
 
 This action requires the following inputs:
 
-#### `github-repository`
-
-Repository full name in the format `owner/repo`. This value can be retrieved from the GitHub context
-`${{ github.repository }}`.
-Please, find more information about GitHub context in the following GitHub documentation:
-
-- [Accessing contextual information about workflow runs](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context)
-
-**Required** The repository full name in the format `owner/repo`. No default value.
-
 #### `github-token`
 
 GitHub token to access the GitHub API. This value can be retrieved from the GitHub secrets context

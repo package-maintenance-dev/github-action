@@ -2,6 +2,7 @@
 Module containing the function to parse the action arguments into the corresponding typesafe model.
 """
 
+import os
 from typing import Optional
 
 import argparse
@@ -33,8 +34,9 @@ def parse_action_arguments(args: argparse.Namespace) -> ActionArguments:
 
 
 def _parse_github_repository(args: argparse.Namespace) -> tuple[str, str]:
+    github_repository = args.github_repository or os.environ["GITHUB_REPOSITORY"]
     try:
-        owner, repo = map(str.strip, args.github_repository.split("/"))
+        owner, repo = map(str.strip, github_repository.split("/"))
         if not owner or not repo:
             raise ValueError("Both owner and repo must be non-empty.")
     except ValueError:

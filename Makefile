@@ -74,7 +74,7 @@ run-action-maven-example:
 	python main.py --github_repository package-maintenance-dev/github-action-maven-example
 
 run-docker-action-maven-example:
-	docker run pmd-github-action --github_repository package-maintenance-dev/github-action-maven-example
+	docker run -e GITHUB_REPOSITORY=package-maintenance-dev/github-action-maven-example pmd-github-action
 
 run-examples: run-action-maven-example
 

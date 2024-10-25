@@ -16,9 +16,11 @@ def test_parse_packages_scores_thresholds():
     result = _parse_packages_scores_thresholds(thresholds_str)
     assert result == expected_dict
 
+
 def test_invalid_packages_scores_thresholds():
     with pytest.raises(ValueError, match="Both key and value must be non-empty."):
         _parse_packages_scores_thresholds('source_commit_frequency:,binary_release_recency:A')
+
 
 def test_parse_arguments():
     test_args = [
@@ -42,16 +44,6 @@ def test_parse_arguments():
             PackageMetric.binary_release_recency: PackageMetricScore.A
         }
 
-def test_missing_required_argument():
-    test_args = [
-        'script_name'
-    ]
-
-    with patch.object(sys, 'argv', test_args):
-        with pytest.raises(SystemExit) as exc_info:
-            parse_arguments()
-
-        assert exc_info.type == SystemExit
 
 def test_no_ignore_packages():
     test_args = [
@@ -74,6 +66,7 @@ def test_no_ignore_packages():
             PackageMetric.source_commit_frequency: PackageMetricScore.B,
             PackageMetric.binary_release_recency: PackageMetricScore.A
         }
+
 
 def test_multiline_ignore_packages():
     test_args = [

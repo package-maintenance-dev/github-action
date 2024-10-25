@@ -1,6 +1,3 @@
-import markdown
-
-
 class MarkdownDocument:
     """
     This is a mutable class for building Markdown documents.
@@ -14,9 +11,8 @@ class MarkdownDocument:
     def __init__(self, content: str = ""):
         self._content = content
 
-    def render_html(self) -> str:
-        html = markdown.markdown(self._content)
-        return html
+    def get_content(self) -> str:
+        return self._content
 
     def heading(self, text: str, level: int = 1) -> "MarkdownDocument":
         if not (1 <= level <= 6):

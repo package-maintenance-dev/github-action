@@ -11,7 +11,7 @@ def parse_arguments():
     parser.add_argument(
         "--github_repository",
         type=str,
-        required=True,
+        required=False,
         help="GitHub repository in the form of owner/repo.",
     )
     parser.add_argument(

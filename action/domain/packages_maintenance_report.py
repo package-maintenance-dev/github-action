@@ -46,9 +46,17 @@ class PackagesMaintenanceReport:
         Renders the report as a markdown string.
         """
         report = MarkdownDocument()
+        report.heading("Package maintenance report", level=3)
+        report.text(
+            "This report provides brief information about current repository dependencies maintenance status.\n"
+        )
+
         missing_data_packages = self.missing_data_packages()
         if missing_data_packages:
-            report.heading("Missing data packages", level=2)
+            report.heading("Missing data packages", level=3)
+            report.text(
+                "The following packages are missing maintenance data in the package-maintenance.dev index"
+            )
             report.table(
                 headers=["Type", "Namespace", "Name"],
                 rows=[
@@ -61,7 +69,10 @@ class PackagesMaintenanceReport:
 
         below_threshold_packages = self.below_threshold_packages()
         if below_threshold_packages:
-            report.heading("Below threshold packages", level=2)
+            report.heading("Below threshold packages", level=3)
+            report.text(
+                "The following packages fall below the maintenance score threshold"
+            )
             report.table(
                 headers=[
                     "Type",
@@ -92,8 +103,8 @@ class PackagesMaintenanceReport:
                 ],
             )
 
-        html = report.render_html()
-        return html
+        content = report.get_content()
+        return content
 
     def missing_data_packages(self) -> List["PackageURL"]:
         """

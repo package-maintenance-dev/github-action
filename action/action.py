@@ -1,4 +1,5 @@
 import logging
+import os
 
 import argparse
 
@@ -28,4 +29,15 @@ def perform_action(raw_arguments: argparse.Namespace):
         packages_maintenance=packages_maintenance,
         action_arguments=arguments,
     )
-    print(report.render())
+
+    summary_file = os.getenv("GITHUB_STEP_SUMMARY")
+
+    # Check if the environment variable exists
+    report_markdown = report.render()
+    if summary_file:
+        with open(summary_file, "a") as f:
+            f.write(report_markdown)
+    else:
+        print(
+            f"GITHUB_STEP_SUMMARY is not set. Printing the report to stdout: \n{report_markdown}"
+        )

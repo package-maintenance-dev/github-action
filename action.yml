@@ -3,10 +3,6 @@ description: |-
   This action finds unsupported dependencies in your project using package-maintenance.dev.
   Found dependencies will be printed in the logs or result to failed execution depending on the action configuration.
 inputs:
-  github-repository:
-    description: |-
-      Repository full name in the format `owner/repo`. This value can be retrieved from the GitHub context.
-    required: true
   github-token:
     description: |-
       GitHub token to access the GitHub API. This value can be retrieved from the GitHub secrets context.
@@ -35,8 +31,6 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - --github_repository
-    - ${{ inputs.github-repository }}
     - --github_token
     - ${{ inputs.github-token }}
     - --packages_ignore
