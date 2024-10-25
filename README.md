@@ -64,12 +64,6 @@ This value format is a list of key-value pairs in the format of `metric:threshol
 packages-scores-thresholds: "source_commit_frequency:B,binary_release_recency:A"
 ```
 
-To set threshold for all metrics, use asterisk `*` as a key. For example:
-
-```
-packages-scores-thresholds: "*:B"
-```
-
 To set no threshold set the value to an empty string. For example:
 
 ```
@@ -77,7 +71,7 @@ packages-scores-thresholds: ""
 ```
 In this case, the action will not check the score of the packages and just will output the complete audit information.
 
-**Optional** The score threshold for the package. The default value is `*:B`.
+**Optional** The score threshold for the package. The default value is `binary_release_recency:B,source_commit_recency:B,source_commit_frequency:B`.
 
 ## Outputs
 

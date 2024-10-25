@@ -30,7 +30,7 @@ inputs:
       This value format is a list of key-value pairs in the format of `metric:threshold`.
       For example: `source.commit.frequency:B,binary.release.recency:A`. The value is optional and the default value is `*:B`.
     required: false
-    default: '*:B'
+    default: 'binary_release_recency:B,source_commit_recency:B,source_commit_frequency:B'
 runs:
   using: 'docker'
   image: 'Dockerfile'
