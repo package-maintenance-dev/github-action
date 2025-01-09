@@ -32,7 +32,6 @@ and the default value is an empty list, that means all packages will be checked.
 The list should be in format of multiline string with each line in [PURL](https://github.com/package-url/purl-spec) format without version. For example:
 
 ```
-pkg:npm/express
 pkg:pypi/django
 ```
 
@@ -77,10 +76,8 @@ The following example shows how to use the action in a workflow:
 ```yaml
 uses: package-maintenance-dev/github-action@v0.0.1
 with:
-  github-repository: ${{ github.repository }}
   github-token: ${{ secrets.GITHUB_TOKEN }}
   packages-ignore: |
-    pkg:npm/express
     pkg:pypi/django
   packages-scores-thresholds: "source.commit.frequency:B,binary.release.recency:A"
 ```

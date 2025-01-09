@@ -1,7 +1,7 @@
 from packageurl import PackageURL
 
-from action.domain.packages_ignore_filter import PackagesIgnoreFilter
-from action.arguments.action_arguments import ActionArguments
+from src.domain.packages_ignore_filter import PackagesIgnoreFilter
+from src.arguments.action_arguments import ActionArguments
 
 
 def test_allow_all_packages_if_no_argument_provided():

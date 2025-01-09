@@ -8,7 +8,7 @@ from typing import Optional
 import argparse
 from packageurl import PackageURL
 
-from action.arguments.action_arguments import (
+from src.arguments.action_arguments import (
     PackageMetricScore,
     PackageMetric,
     ActionArguments,
@@ -20,9 +20,7 @@ def parse_action_arguments(args: argparse.Namespace) -> ActionArguments:
     github_owner, github_repo = _parse_github_repository(args)
     github_token = args.github_token
     packages_ignore = _parse_packages_ignore(args)
-    packages_scores_thresholds = _parse_packages_scores_thresholds(
-        args.packages_scores_thresholds
-    )
+    packages_scores_thresholds = _parse_packages_scores_thresholds(args.packages_scores_thresholds)
     action_arguments = ActionArguments(
         github_repository_owner=github_owner,
         github_repository_name=github_repo,
@@ -40,9 +38,7 @@ def _parse_github_repository(args: argparse.Namespace) -> tuple[str, str]:
         if not owner or not repo:
             raise ValueError("Both owner and repo must be non-empty.")
     except ValueError:
-        raise ValueError(
-            "Invalid format for GitHub repository. It should be in the form 'owner/repo'."
-        )
+        raise ValueError("Invalid format for GitHub repository. It should be in the form 'owner/repo'.")
     return owner, repo
 
 

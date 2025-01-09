@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import patch
 
-from action.clients.package_maintenance.client import fetch_packages
-from action.clients.package_maintenance.model import PackagesRequest, PackagesResponse
+from src.clients.package_maintenance.client import fetch_packages
+from src.clients.package_maintenance.model import PackagesRequest, PackagesResponse
 
 
 @pytest.fixture

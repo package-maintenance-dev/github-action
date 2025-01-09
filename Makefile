@@ -16,17 +16,26 @@ venv:
 
 install-dependencies:
 	@echo "Installing dependencies..."
-	@pip install -r requirements.txt
-
-install-test-dependencies:
-	@echo "Installing dependencies..."
-	@pip install -r requirements-test.txt
+	@pip install .
+	@pip install .[lint]
+	@pip install .[test]
 
 pull-hadolint:
 	@echo "Pulling hadolint image..."
 	@docker pull hadolint/hadolint
 
-setup: venv install-dependencies install-test-dependencies pull-hadolint
+setup: venv install-dependencies pull-hadolint
+
+#
+# Clean: clean up build artifacts
+#
+clean:
+	@echo "Cleaning up..."
+	@rm -rf .pytest_cache
+	@rm -rf .mypy_cache
+	@rm -rf .coverage
+	@rm -rf .coverage.*
+	@find . -name "*.log" -type f -delete
 
 #
 # Lint: lint application code
@@ -37,15 +46,15 @@ hadolint-docker:
 
 mypy:
 	@echo "Running mypy..."
-	@mypy action
+	@mypy src
 
 black:
 	@echo "Running black..."
-	@black --check action
+	@black --check src
 
 flake8:
 	@echo "Running flake8..."
-	@flake8 action
+	@flake8 src
 
 lint: hadolint-docker mypy black flake8
 
@@ -55,7 +64,7 @@ lint: hadolint-docker mypy black flake8
 
 black-format:
 	@echo "Running black..."
-	@black action
+	@black src
 
 format: black-format
 

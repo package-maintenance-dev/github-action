@@ -3,10 +3,10 @@ import os
 
 import argparse
 
-from action.arguments.parse_action_arguments import parse_action_arguments
-from action.domain.packages_maintenance_report import PackagesMaintenanceReport
-from action.domain.packages_maintenance_retriever import PackagesMaintenanceRetriever
-from action.domain.packages_retriever import PackagesRetriever
+from src.arguments.parse_action_arguments import parse_action_arguments
+from src.domain.packages_maintenance_report import PackagesMaintenanceReport
+from src.domain.packages_maintenance_retriever import PackagesMaintenanceRetriever
+from src.domain.packages_retriever import PackagesRetriever
 
 logger = logging.getLogger(__name__)
 
@@ -21,9 +21,7 @@ def perform_action(raw_arguments: argparse.Namespace):
     packages_maintenance_retriever = PackagesMaintenanceRetriever()
 
     packages_urls = packages_retriever.get_packages_urls_to_check()
-    packages_maintenance = packages_maintenance_retriever.get_packages_maintenance(
-        packages_urls
-    )
+    packages_maintenance = packages_maintenance_retriever.get_packages_maintenance(packages_urls)
     report = PackagesMaintenanceReport.create(
         packages=packages_urls,
         packages_maintenance=packages_maintenance,
@@ -38,6 +36,4 @@ def perform_action(raw_arguments: argparse.Namespace):
         with open(summary_file, "a") as f:
             f.write(report_markdown)
     else:
-        print(
-            f"GITHUB_STEP_SUMMARY is not set. Printing the report to stdout: \n{report_markdown}"
-        )
+        print(f"GITHUB_STEP_SUMMARY is not set. Printing the report to stdout: \n{report_markdown}")

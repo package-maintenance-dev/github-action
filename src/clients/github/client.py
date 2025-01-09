@@ -3,13 +3,11 @@ from typing import Optional
 
 import requests
 
-from action.clients.github.model import SBOMResponse
+from src.clients.github.model import SBOMResponse
 
 
 @typing.no_type_check
-def fetch_github_sbom(
-    owner: str, repo: str, token: Optional[str] = None
-) -> SBOMResponse:
+def fetch_github_sbom(owner: str, repo: str, token: Optional[str] = None) -> SBOMResponse:
     """
     Fetches the SBOM for a given GitHub repository and parses it into a Pydantic model.
 

@@ -11,4 +11,4 @@ def grouped(input_list: List[T], size: int) -> List[List[T]]:
     :param size: size of the chunk
     :return: list of chunks
     """
-    return [input_list[i : i + size] for i in range(0, len(input_list), size)]
+    return [input_list[i : i + size] for i in range(0, len(input_list), size)]  # noqa: E203

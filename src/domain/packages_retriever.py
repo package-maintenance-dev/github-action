@@ -3,10 +3,10 @@ from typing import Optional, List
 
 from packageurl import PackageURL
 
-from action.arguments.action_arguments import ActionArguments
-from action.clients.github.client import fetch_github_sbom
-from action.clients.github.model import SBOMResponse, Package
-from action.domain.packages_ignore_filter import PackagesIgnoreFilter
+from src.arguments.action_arguments import ActionArguments
+from src.clients.github.client import fetch_github_sbom
+from src.clients.github.model import SBOMResponse, Package
+from src.domain.packages_ignore_filter import PackagesIgnoreFilter
 
 logger = logging.getLogger(__name__)
 

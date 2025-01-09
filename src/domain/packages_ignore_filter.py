@@ -2,7 +2,7 @@ from typing import Set, FrozenSet, Tuple, TypeAlias
 
 from packageurl import PackageURL
 
-from action.arguments.action_arguments import ActionArguments
+from src.arguments.action_arguments import ActionArguments
 
 # Tuple type representing package to ignore fo checking: `type`, `namespace` and `name`.
 # The former two have supports dedicated asterisk symbol `*` that is considered as 'ignore all'.

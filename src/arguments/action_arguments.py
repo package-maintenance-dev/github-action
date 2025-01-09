@@ -2,7 +2,9 @@ from enum import Enum
 from typing import Optional, Annotated
 
 from packageurl import PackageURL
-from pydantic import BaseModel, SkipValidation
+from pydantic import BaseModel, SkipValidation  # type: ignore[attr-defined]
+
+DEFAULT_SCORE_THRESHOLD = "B"
 
 
 class PackageMetric(Enum):
@@ -16,11 +18,10 @@ class PackageMetric(Enum):
 
 
 def default_packages_scores_thresholds():
-    default_score_threshold = "B"
     return {
-        PackageMetric.binary_release_recency: default_score_threshold,
-        PackageMetric.source_commit_frequency: default_score_threshold,
-        PackageMetric.source_commit_recency: default_score_threshold,
+        PackageMetric.binary_release_recency: DEFAULT_SCORE_THRESHOLD,
+        PackageMetric.source_commit_frequency: DEFAULT_SCORE_THRESHOLD,
+        PackageMetric.source_commit_recency: DEFAULT_SCORE_THRESHOLD,
     }
 
 
@@ -36,6 +37,4 @@ class ActionArguments(BaseModel):
     github_repository_name: str
     github_token: Optional[str] = None
     packages_ignore: Annotated[list["PackageURL"], SkipValidation] = []
-    packages_scores_thresholds: dict[PackageMetric, PackageMetricScore] = (
-        default_packages_scores_thresholds()
-    )
+    packages_scores_thresholds: dict[PackageMetric, PackageMetricScore] = default_packages_scores_thresholds()

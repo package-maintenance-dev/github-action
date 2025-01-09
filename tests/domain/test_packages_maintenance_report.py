@@ -2,9 +2,9 @@ from typing import List
 
 from packageurl import PackageURL
 
-from action.arguments.action_arguments import PackageMetric, PackageMetricScore, ActionArguments
-from action.clients.package_maintenance.model import PackageMetadata, MaintenanceMetric, BinaryRepository
-from action.domain.packages_maintenance_report import PackagesMaintenanceReport
+from src.arguments.action_arguments import PackageMetric, PackageMetricScore, ActionArguments
+from src.clients.package_maintenance.model import PackageMetadata, MaintenanceMetric, BinaryRepository
+from src.domain.packages_maintenance_report import PackagesMaintenanceReport
 
 
 def test_missing_data_packages():

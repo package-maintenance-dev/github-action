@@ -3,7 +3,7 @@ import typing
 
 import requests
 
-from action.clients.package_maintenance.model import PackagesRequest, PackagesResponse
+from src.clients.package_maintenance.model import PackagesRequest, PackagesResponse
 
 API_HOST = "https://package-maintenance-03eac526c607.herokuapp.com"
 

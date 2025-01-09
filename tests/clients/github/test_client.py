@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 import pytest
 
-from action.clients.github.client import fetch_github_sbom
-from action.clients.github.model import SBOMResponse
+from src.clients.github.client import fetch_github_sbom
+from src.clients.github.model import SBOMResponse
 
 
 @pytest.fixture

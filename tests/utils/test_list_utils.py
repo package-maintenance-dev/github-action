@@ -1,4 +1,4 @@
-from action.utils.list_utils import grouped
+from src.utils.list_utils import grouped
 
 
 def test_grouped():

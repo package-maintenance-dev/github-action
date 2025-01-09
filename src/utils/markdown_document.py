@@ -33,9 +33,7 @@ class MarkdownDocument:
         column_count = len(headers)
         for row in rows:
             if len(row) != column_count:
-                raise ValueError(
-                    "Each row must have the same number of columns as the headers"
-                )
+                raise ValueError("Each row must have the same number of columns as the headers")
 
         # Create the table
         self._content += "| " + " | ".join(headers) + " |\n"

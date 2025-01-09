@@ -1,8 +1,8 @@
 import pytest
 from argparse import Namespace
 from packageurl import PackageURL
-from action.arguments.action_arguments import PackageMetric, PackageMetricScore, ActionArguments
-from action.arguments.parse_action_arguments import _parse_github_repository, _parse_packages_ignore, \
+from src.arguments.action_arguments import PackageMetric, PackageMetricScore, ActionArguments
+from src.arguments.parse_action_arguments import _parse_github_repository, _parse_packages_ignore, \
     _parse_packages_scores_thresholds, parse_action_arguments
 
 

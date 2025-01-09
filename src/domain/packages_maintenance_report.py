@@ -2,14 +2,14 @@ from typing import List, Set, Optional, Tuple
 
 from packageurl import PackageURL
 
-from action.arguments.action_arguments import (
+from src.arguments.action_arguments import (
     PackageMetric,
     PackageMetricScore,
     ActionArguments,
 )
-from action.clients.package_maintenance.model import PackageMetadata, MaintenanceMetric
-from action.domain.commons import package_url_to_repository_id
-from action.utils.markdown_document import MarkdownDocument
+from src.clients.package_maintenance.model import PackageMetadata, MaintenanceMetric
+from src.domain.commons import package_url_to_repository_id
+from src.utils.markdown_document import MarkdownDocument
 
 
 class PackagesMaintenanceReport:
@@ -19,9 +19,7 @@ class PackagesMaintenanceReport:
         packages_maintenance: List[PackageMetadata],
         action_arguments: ActionArguments,
     ) -> "PackagesMaintenanceReport":
-        return PackagesMaintenanceReport(
-            packages, packages_maintenance, action_arguments.packages_scores_thresholds
-        )
+        return PackagesMaintenanceReport(packages, packages_maintenance, action_arguments.packages_scores_thresholds)
 
     """
     Represents a report based on a repository packages (fetched from dependency graph GitHub API) and
@@ -54,15 +52,10 @@ class PackagesMaintenanceReport:
         missing_data_packages = self.missing_data_packages()
         if missing_data_packages:
             report.heading("Missing data packages", level=3)
-            report.text(
-                "The following packages are missing maintenance data in the package-maintenance.dev index"
-            )
+            report.text("The following packages are missing maintenance data in the package-maintenance.dev index")
             report.table(
                 headers=["Type", "Namespace", "Name"],
-                rows=[
-                    [package.type, package.namespace or "-", package.name]
-                    for package in missing_data_packages
-                ],
+                rows=[[package.type, package.namespace or "-", package.name] for package in missing_data_packages],
             )
 
         report.text("\n")
@@ -70,9 +63,7 @@ class PackagesMaintenanceReport:
         below_threshold_packages = self.below_threshold_packages()
         if below_threshold_packages:
             report.heading("Below threshold packages", level=3)
-            report.text(
-                "The following packages fall below the maintenance score threshold"
-            )
+            report.text("The following packages fall below the maintenance score threshold")
             report.table(
                 headers=[
                     "Type",
@@ -90,11 +81,7 @@ class PackagesMaintenanceReport:
                         package.binary_repository.id,
                         package.binary_repository.latest_version,
                         package.binary_repository.url,
-                        (
-                            package.source_repository.url
-                            if package.source_repository
-                            else "-"
-                        ),
+                        (package.source_repository.url if package.source_repository else "-"),
                         metric.name,
                         package_metric.score,
                         str(package_metric.value),
@@ -161,38 +148,22 @@ class PackagesMaintenanceReport:
                     below_threshold_packages.append(bellow_threshold)
         return below_threshold_packages
 
-    def _get_package_metric(
-        self, package: PackageMetadata, metric: PackageMetric
-    ) -> Optional[MaintenanceMetric]:
+    def _get_package_metric(self, package: PackageMetadata, metric: PackageMetric) -> Optional[MaintenanceMetric]:
         source_repository = package.source_repository
         match metric:
             case PackageMetric.binary_release_recency:
                 return package.binary_repository.release_recency
             case PackageMetric.source_commit_frequency:
-                return (
-                    source_repository.commits_frequency if source_repository else None
-                )
+                return source_repository.commits_frequency if source_repository else None
             case PackageMetric.source_commit_recency:
                 return source_repository.commits_recency if source_repository else None
             case PackageMetric.issues_lifetime:
                 return source_repository.issues_lifetime if source_repository else None
             case PackageMetric.issues_open_percentage:
-                return (
-                    source_repository.issues_open_percentage
-                    if source_repository
-                    else None
-                )
+                return source_repository.issues_open_percentage if source_repository else None
             case PackageMetric.pull_requests_lifetime:
-                return (
-                    source_repository.pull_requests_lifetime
-                    if source_repository
-                    else None
-                )
+                return source_repository.pull_requests_lifetime if source_repository else None
             case PackageMetric.pull_requests_open_percentage:
-                return (
-                    source_repository.pull_requests_open_percentage
-                    if source_repository
-                    else None
-                )
+                return source_repository.pull_requests_open_percentage if source_repository else None
             case _:
                 return None
