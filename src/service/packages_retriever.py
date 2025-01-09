@@ -5,8 +5,8 @@ from packageurl import PackageURL
 
 from src.arguments.action_arguments import ActionArguments
 from src.clients.github.client import fetch_github_sbom
-from src.clients.github.model import SBOMResponse, Package
-from src.domain.packages_ignore_filter import PackagesIgnoreFilter
+from src.clients.github.model import SBOMResponse, Package, ExternalRef
+from src.models.packages_ignore_filter import PackagesIgnoreFilter
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +48,10 @@ class PackagesRetriever:
         self._packages_ignore_filter = packages_ignore_filter
 
     def get_packages_urls_to_check(self) -> List["PackageURL"]:
+        """
+        Get list of packages URLs to check for maintenance scores based on SBOM and action arguments.
+        :return: list of package URLs to check
+        """
         sbom = fetch_github_sbom(
             owner=self._owner,
             repo=self._name,
@@ -68,17 +72,22 @@ class PackagesRetriever:
         packages_urls: List["PackageURL"] = []
         external_refs = package.externalRefs or []
         for external_ref in external_refs:
-            if external_ref.referenceType != "purl":
-                logger.info(
-                    f"Package '{package.name}' has an unsupported reference type '{external_ref.referenceType}'. Skipping..."
-                )
-                continue
-
-            purl = PackageURL.from_string(external_ref.referenceLocator)
-            ignore = self._packages_ignore_filter.ignore(purl)
-            if ignore:
-                logger.info(f"Package '{package.name}' is ignored. Skipping...")
-                continue
-
-            packages_urls.append(purl)
+            package_url = self._get_package_url_from_external_ref(package, external_ref)
+            if package_url:
+                packages_urls.append(package_url)
         return packages_urls
+
+    def _get_package_url_from_external_ref(self, package: Package, external_ref: ExternalRef) -> Optional["PackageURL"]:
+        if external_ref.referenceType != "purl":
+            logger.info(
+                f"Package '{package.name}' has an unsupported reference type '{external_ref.referenceType}'. Skipping..."
+            )
+            return None
+
+        purl = PackageURL.from_string(external_ref.referenceLocator)
+        ignore = self._packages_ignore_filter.ignore(purl)
+        if ignore:
+            logger.info(f"Package '{package.name}' is ignored. Skipping...")
+            return None
+
+        return purl

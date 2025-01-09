@@ -2,9 +2,9 @@ from typing import List
 
 from packageurl import PackageURL
 
-from src.arguments.action_arguments import PackageMetric, PackageMetricScore, ActionArguments
+from src.arguments.action_arguments import MaintenanceMetricSlug, MaintenanceMetricScore, ActionArguments
 from src.clients.package_maintenance.model import PackageMetadata, MaintenanceMetric, BinaryRepository
-from src.domain.packages_maintenance_report import PackagesMaintenanceReport
+from src.models.packages_maintenance_report import PackagesMaintenanceReport
 
 
 def test_missing_data_packages():
@@ -69,16 +69,16 @@ def test_below_threshold_packages():
         github_repository_owner="owner",
         github_repository_name="repo",
         packages_scores_thresholds={
-            PackageMetric.binary_release_recency: PackageMetricScore("B")
+            MaintenanceMetricSlug.binary_release_recency: MaintenanceMetricScore("B")
         }
     )
 
     report = PackagesMaintenanceReport.create(packages, [package_metadata], action_arguments)
-    below_threshold = report.below_threshold_packages()
+    below_threshold = report.found_packages()
 
     assert len(below_threshold) == 1
     assert below_threshold[0][0].binary_repository.id == "example-package"
-    assert below_threshold[0][1] == PackageMetric.binary_release_recency
+    assert below_threshold[0][1] == MaintenanceMetricSlug.binary_release_recency
     assert below_threshold[0][2].score == "C"
 
 
@@ -110,4 +110,4 @@ def test_get_package_metric_none():
     )
 
     report = PackagesMaintenanceReport.create(packages, [package_metadata], action_arguments)
-    assert report._get_package_metric(package_metadata, PackageMetric.issues_lifetime) is None
+    assert report._get_package_metric(package_metadata, MaintenanceMetricSlug.issues_lifetime) is None

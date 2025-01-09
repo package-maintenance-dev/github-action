@@ -3,15 +3,15 @@ import sys
 from unittest.mock import patch
 
 from main import parse_arguments
-from src.arguments.action_arguments import PackageMetric, PackageMetricScore
+from src.arguments.action_arguments import MaintenanceMetricSlug, MaintenanceMetricScore
 from src.arguments.parse_action_arguments import _parse_packages_scores_thresholds
 
 
 def test_parse_packages_scores_thresholds():
     thresholds_str = 'source_commit_frequency:B,binary_release_recency:A'
     expected_dict = {
-        PackageMetric.source_commit_frequency: PackageMetricScore.B,
-        PackageMetric.binary_release_recency: PackageMetricScore.A
+        MaintenanceMetricSlug.source_commit_frequency: MaintenanceMetricScore.B,
+        MaintenanceMetricSlug.binary_release_recency: MaintenanceMetricScore.A
     }
     result = _parse_packages_scores_thresholds(thresholds_str)
     assert result == expected_dict
@@ -40,8 +40,8 @@ def test_parse_arguments():
         assert args.packages_ignore == 'pkg1\npkg2\npkg3'
         packages_scores_thresholds = _parse_packages_scores_thresholds(args.packages_scores_thresholds)
         assert packages_scores_thresholds == {
-            PackageMetric.source_commit_frequency: PackageMetricScore.B,
-            PackageMetric.binary_release_recency: PackageMetricScore.A
+            MaintenanceMetricSlug.source_commit_frequency: MaintenanceMetricScore.B,
+            MaintenanceMetricSlug.binary_release_recency: MaintenanceMetricScore.A
         }
 
 
@@ -63,8 +63,8 @@ def test_no_ignore_packages():
         assert args.packages_ignore is None
         packages_scores_thresholds = _parse_packages_scores_thresholds(args.packages_scores_thresholds)
         assert packages_scores_thresholds == {
-            PackageMetric.source_commit_frequency: PackageMetricScore.B,
-            PackageMetric.binary_release_recency: PackageMetricScore.A
+            MaintenanceMetricSlug.source_commit_frequency: MaintenanceMetricScore.B,
+            MaintenanceMetricSlug.binary_release_recency: MaintenanceMetricScore.A
         }
 
 

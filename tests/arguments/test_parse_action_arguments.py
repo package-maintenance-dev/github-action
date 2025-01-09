@@ -1,7 +1,7 @@
 import pytest
 from argparse import Namespace
 from packageurl import PackageURL
-from src.arguments.action_arguments import PackageMetric, PackageMetricScore, ActionArguments
+from src.arguments.action_arguments import MaintenanceMetricSlug, MaintenanceMetricScore, ActionArguments
 from src.arguments.parse_action_arguments import _parse_github_repository, _parse_packages_ignore, \
     _parse_packages_scores_thresholds, parse_action_arguments
 
@@ -31,8 +31,8 @@ def test_parse_packages_scores_thresholds():
     thresholds = "source_commit_frequency:A,binary_release_recency:B"
     result = _parse_packages_scores_thresholds(thresholds)
     assert len(result) == 2
-    assert result[PackageMetric("source_commit_frequency")] == PackageMetricScore("A")
-    assert result[PackageMetric("binary_release_recency")] == PackageMetricScore("B")
+    assert result[MaintenanceMetricSlug("source_commit_frequency")] == MaintenanceMetricScore("A")
+    assert result[MaintenanceMetricSlug("binary_release_recency")] == MaintenanceMetricScore("B")
 
     thresholds_invalid = "invalid:"
     with pytest.raises(ValueError, match="Both key and value must be non-empty"):
@@ -49,4 +49,4 @@ def test_parse_action_arguments():
     assert result.github_repository_owner == "owner"
     assert result.github_repository_name == "repo"
     assert len(result.packages_ignore) == 2
-    assert result.packages_scores_thresholds[PackageMetric("source_commit_frequency")] == PackageMetricScore("A")
+    assert result.packages_scores_thresholds[MaintenanceMetricSlug("source_commit_frequency")] == MaintenanceMetricScore("A")

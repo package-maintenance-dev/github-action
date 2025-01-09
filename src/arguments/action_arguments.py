@@ -7,7 +7,7 @@ from pydantic import BaseModel, SkipValidation  # type: ignore[attr-defined]
 DEFAULT_SCORE_THRESHOLD = "B"
 
 
-class PackageMetric(Enum):
+class MaintenanceMetricSlug(Enum):
     binary_release_recency = "binary_release_recency"
     source_commit_frequency = "source_commit_frequency"
     source_commit_recency = "source_commit_recency"
@@ -19,13 +19,13 @@ class PackageMetric(Enum):
 
 def default_packages_scores_thresholds():
     return {
-        PackageMetric.binary_release_recency: DEFAULT_SCORE_THRESHOLD,
-        PackageMetric.source_commit_frequency: DEFAULT_SCORE_THRESHOLD,
-        PackageMetric.source_commit_recency: DEFAULT_SCORE_THRESHOLD,
+        MaintenanceMetricSlug.binary_release_recency: DEFAULT_SCORE_THRESHOLD,
+        MaintenanceMetricSlug.source_commit_frequency: DEFAULT_SCORE_THRESHOLD,
+        MaintenanceMetricSlug.source_commit_recency: DEFAULT_SCORE_THRESHOLD,
     }
 
 
-class PackageMetricScore(Enum):
+class MaintenanceMetricScore(Enum):
     A = "A"
     B = "B"
     C = "C"
@@ -37,4 +37,6 @@ class ActionArguments(BaseModel):
     github_repository_name: str
     github_token: Optional[str] = None
     packages_ignore: Annotated[list["PackageURL"], SkipValidation] = []
-    packages_scores_thresholds: dict[PackageMetric, PackageMetricScore] = default_packages_scores_thresholds()
+    packages_scores_thresholds: dict[MaintenanceMetricSlug, MaintenanceMetricScore] = (
+        default_packages_scores_thresholds()
+    )
