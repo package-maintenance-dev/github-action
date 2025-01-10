@@ -1,6 +1,6 @@
 from packageurl import PackageURL
 
-from src.domain.packages_ignore_filter import PackagesIgnoreFilter
+from src.models.packages_ignore_filter import PackagesIgnoreFilter
 from src.arguments.action_arguments import ActionArguments
 
 

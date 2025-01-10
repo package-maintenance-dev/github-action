@@ -36,12 +36,12 @@ class Package(BaseModel):
 
     SPDXID: str
     name: str
-    versionInfo: str
-    downloadLocation: str
     filesAnalyzed: bool
+    versionInfo: Optional[str] = None
+    downloadLocation: Optional[str] = None
     licenseConcluded: Optional[str] = None
     licenseDeclared: Optional[str] = None
-    supplier: str
+    supplier: Optional[str] = None
     copyrightText: Optional[str] = None
     externalRefs: Optional[List[ExternalRef]] = None
 
@@ -80,9 +80,9 @@ class SBOM(BaseModel):
     creationInfo: CreationInfo
     name: str
     dataLicense: str
-    documentDescribes: List[str]
     documentNamespace: str
     packages: List[Package]
+    documentDescribes: List[str] = []
 
 
 class SBOMResponse(BaseModel):

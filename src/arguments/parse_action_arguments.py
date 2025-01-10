@@ -9,8 +9,8 @@ import argparse
 from packageurl import PackageURL
 
 from src.arguments.action_arguments import (
-    PackageMetricScore,
-    PackageMetric,
+    MaintenanceMetricScore,
+    MaintenanceMetricSlug,
     ActionArguments,
     default_packages_scores_thresholds,
 )
@@ -61,7 +61,7 @@ def _parse_packages_ignore(args: argparse.Namespace) -> list[PackageURL]:
 
 def _parse_packages_scores_thresholds(
     thresholds: Optional[str],
-) -> dict[PackageMetric, PackageMetricScore]:
+) -> dict[MaintenanceMetricSlug, MaintenanceMetricScore]:
     if not thresholds:
         return default_packages_scores_thresholds()
 
@@ -70,7 +70,7 @@ def _parse_packages_scores_thresholds(
         key, value = map(str.strip, entry.split(":"))
         if not key or not value:
             raise ValueError("Both key and value must be non-empty.")
-        sbom_metric = PackageMetric(key.lower())
-        sbom_score = PackageMetricScore(value.upper())
+        sbom_metric = MaintenanceMetricSlug(key.lower())
+        sbom_score = MaintenanceMetricScore(value.upper())
         thresholds_dict[sbom_metric] = sbom_score
     return thresholds_dict

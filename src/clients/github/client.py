@@ -41,6 +41,7 @@ def fetch_github_sbom(owner: str, repo: str, token: Optional[str] = None) -> SBO
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        return SBOMResponse.model_validate(response.json())
+        json = response.json()
+        return SBOMResponse.model_validate(json)
     else:
         response.raise_for_status()

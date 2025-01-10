@@ -30,7 +30,8 @@ def fetch_packages(payload: PackagesRequest) -> PackagesResponse:
     response = requests.post(url, json=json, headers=headers)
 
     if response.status_code == 200:
-        return PackagesResponse.model_validate(response.json())
+        json = response.json()
+        return PackagesResponse.model_validate(json)
     else:
         logger.error("Failed to fetch packages. Response body: %s", response.text)
         response.raise_for_status()

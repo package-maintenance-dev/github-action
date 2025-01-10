@@ -4,9 +4,10 @@ import os
 import argparse
 
 from src.arguments.parse_action_arguments import parse_action_arguments
-from src.domain.packages_maintenance_report import PackagesMaintenanceReport
-from src.domain.packages_maintenance_retriever import PackagesMaintenanceRetriever
-from src.domain.packages_retriever import PackagesRetriever
+from src.models.packages_maintenance_report import PackagesMaintenanceReport
+from src.service.packages_maintenance_retriever import PackagesMaintenanceRetriever
+from src.service.packages_retriever import PackagesRetriever
+from src.view.packages_maintenance_report_document import PackagesMaintenanceReportDocument
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +28,12 @@ def perform_action(raw_arguments: argparse.Namespace):
         packages_maintenance=packages_maintenance,
         action_arguments=arguments,
     )
+    document = PackagesMaintenanceReportDocument(report)
 
     summary_file = os.getenv("GITHUB_STEP_SUMMARY")
 
     # Check if the environment variable exists
-    report_markdown = report.render()
+    report_markdown = document.render()
     if summary_file:
         with open(summary_file, "a") as f:
             f.write(report_markdown)

@@ -80,7 +80,9 @@ build: build-action-docker
 # Run examples: run action on example repositories
 #
 run-action-maven-example:
-	python main.py --github_repository package-maintenance-dev/github-action-maven-example
+	@echo "Running action on Maven example repository..."
+	@mkdir -p .local
+	python main.py --github_repository package-maintenance-dev/github-action-maven-example > .local/maven-example-output.md
 
 run-docker-action-maven-example:
 	docker run -e GITHUB_REPOSITORY=package-maintenance-dev/github-action-maven-example pmd-github-action

@@ -3,7 +3,7 @@ from unittest.mock import patch
 from packageurl import PackageURL
 from src.arguments.action_arguments import ActionArguments
 from src.clients.github.model import SBOMResponse, Package, SBOM, CreationInfo, ExternalRef
-from src.domain.packages_retriever import PackagesRetriever
+from src.service.packages_retriever import PackagesRetriever
 
 
 @pytest.fixture
@@ -44,7 +44,7 @@ def mock_sbom_response() -> SBOMResponse:
     )
 
 
-@patch('src.domain.packages_retriever.fetch_github_sbom')
+@patch('src.service.packages_retriever.fetch_github_sbom')
 def test_get_packages_urls_to_check(fetch_github_sbom, mock_sbom_response: SBOMResponse):
     fetch_github_sbom.return_value = mock_sbom_response
 
@@ -66,7 +66,7 @@ def test_get_packages_urls_to_check(fetch_github_sbom, mock_sbom_response: SBOMR
     assert packages_urls[0].version == "1.0.0"
 
 
-@patch('src.domain.packages_retriever.fetch_github_sbom')
+@patch('src.service.packages_retriever.fetch_github_sbom')
 def test_ignore_packages(fetch_github_sbom, mock_sbom_response: SBOMResponse):
     fetch_github_sbom.return_value = mock_sbom_response
 
