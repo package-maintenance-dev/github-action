@@ -80,7 +80,7 @@ This report provides brief information about current repository dependencies mai
 |  maven |  org.springframework.boot:spring-boot-starter-web | <code>3.4.1</code> | [binary](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web) / [source](https://github.com/spring-projects/spring-boot) |  0 / A 🟢 |  0 / A 🟢 |  1100 / A 🟢 |  6 / A 🟢 | `*` |  3 / C 🟠 | `*` |
 
 ``*`` - Data is not available or is not enough to calculate a score;
-<code style="color: red">⚠</code> - A package maintenance score is below the threshold;
+❗ - A package maintenance score is below the threshold;
 
 ### Missing data packages
 The following packages are missing maintenance data in the package-maintenance.dev index
