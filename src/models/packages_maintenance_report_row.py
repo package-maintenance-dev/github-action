@@ -1,4 +1,4 @@
-from typing import List
+from typing import Set
 
 from pydantic import BaseModel
 
@@ -14,7 +14,7 @@ class PackagesMaintenanceReportRow(BaseModel):
     """
 
     package: PackageMetadata
-    below_threshold_metrics: List[MaintenanceMetricSlug]
+    below_threshold_metrics: Set[MaintenanceMetricSlug]
 
     def is_maintenance_below_threshold(self) -> bool:
         """

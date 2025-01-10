@@ -77,8 +77,8 @@ class PackagesMaintenanceReport:
         below_threshold_metrics = self._get_below_threshold_metrics(package)
         return PackagesMaintenanceReportRow(package=package, below_threshold_metrics=below_threshold_metrics)
 
-    def _get_below_threshold_metrics(self, package: PackageMetadata) -> List[MaintenanceMetricSlug]:
-        below_threshold_metrics: List[MaintenanceMetricSlug] = []
+    def _get_below_threshold_metrics(self, package: PackageMetadata) -> Set[MaintenanceMetricSlug]:
+        below_threshold_metrics: Set[MaintenanceMetricSlug] = set()
         for threshold in self._packages_scores_thresholds.items():
             threshold_metric, threshold_score = threshold
             package_metric = self._get_package_metric(package, threshold_metric)
@@ -89,7 +89,7 @@ class PackagesMaintenanceReport:
             metric_value_below_threshold = threshold_score.value < package_metric.score
 
             if metric_value_below_threshold:
-                below_threshold_metrics.append(threshold_metric)
+                below_threshold_metrics.add(threshold_metric)
         return below_threshold_metrics
 
     def _get_package_metric(

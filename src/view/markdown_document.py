@@ -42,6 +42,9 @@ class MarkdownDocument:
             self._content += "| " + " | ".join(row) + " |\n"
         return self
 
+    def empty_line(self) -> "MarkdownDocument":
+        return self.text("")
+
     def text(self, text: str) -> "MarkdownDocument":
         self._content += f"{text}\n"
         return self

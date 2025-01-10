@@ -74,12 +74,14 @@ def test_below_threshold_packages():
     )
 
     report = PackagesMaintenanceReport.create(packages, [package_metadata], action_arguments)
-    below_threshold = report.found_packages()
+    found_packages = report.found_packages()
 
-    assert len(below_threshold) == 1
-    assert below_threshold[0][0].binary_repository.id == "example-package"
-    assert below_threshold[0][1] == MaintenanceMetricSlug.binary_release_recency
-    assert below_threshold[0][2].score == "C"
+    assert len(found_packages) == 1
+    package = found_packages[0]
+    assert package.package.binary_repository.id == "example-package"
+    below_threshold_metrics = package.below_threshold_metrics
+    assert len(package.below_threshold_metrics) == 1
+    assert MaintenanceMetricSlug.binary_release_recency in below_threshold_metrics
 
 
 def test_get_package_metric_none():
