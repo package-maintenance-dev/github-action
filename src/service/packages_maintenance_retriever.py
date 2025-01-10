@@ -30,7 +30,7 @@ class PackagesMaintenanceRetriever:
         all_packages_maintenance: List[PackageMetadata] = []
         for group in grouped_packages_urls:
             logger.info(f"Retrieving maintenance metadata for group of {len(group)} packages...")
-            packages_maintenance = self._get_packages_maintenance(packages_urls)
+            packages_maintenance = self._get_packages_maintenance(group)
             all_packages_maintenance.extend(packages_maintenance)
         return all_packages_maintenance
 

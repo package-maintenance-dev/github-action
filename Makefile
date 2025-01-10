@@ -84,8 +84,16 @@ run-action-maven-example:
 	@mkdir -p .local
 	python main.py --github_repository package-maintenance-dev/github-action-maven-example > .local/maven-example-output.md
 
+run-action-gradle-example:
+	@echo "Running action on Gradle example repository..."
+	@mkdir -p .local
+	python main.py --github_repository package-maintenance-dev/github-action-gradle-example > .local/gradle-example-output.md
+
 run-docker-action-maven-example:
 	docker run -e GITHUB_REPOSITORY=package-maintenance-dev/github-action-maven-example pmd-github-action
+
+run-docker-action-gradle-example:
+	docker run -e GITHUB_REPOSITORY=package-maintenance-dev/github-action-gradle-example pmd-github-action
 
 run-examples: run-action-maven-example
 

@@ -187,10 +187,9 @@ class PackagesMaintenanceReportDocument:
         report.heading("Missing data packages", level=3)
         report.text("The following packages are missing maintenance data in the package-maintenance.dev index")
         report.empty_line()
-        report.table(
-            headers=["Type", "Namespace", "Name"],
-            rows=[[package.type, package.namespace or NA, package.name] for package in missing_data_packages],
-        )
+        headers = ["Type", "Namespace", "Name"]
+        rows = list(set((package.type, package.namespace or NA, package.name) for package in missing_data_packages))
+        report.table(headers=headers, rows=rows)
 
     def _report_footer(self, report: MarkdownDocument) -> None:
         report.empty_line()

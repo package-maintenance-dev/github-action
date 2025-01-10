@@ -40,7 +40,7 @@ class PackagesMaintenanceReport:
         self._packages_maintenance = packages_maintenance
         self._packages_scores_thresholds = packages_scores_thresholds
 
-    def missing_data_packages(self) -> List["PackageURL"]:
+    def missing_data_packages(self) -> Set["PackageURL"]:
         """
         Returns a list of packages that are missing maintenance data in the package-maintenance.dev index.
         """
@@ -53,7 +53,7 @@ class PackagesMaintenanceReport:
                 )
             )
 
-        missing_data_packages = []
+        missing_data_packages = set()
         for package_url in self._packages:
             binary_repository_type_id = package_url_to_repository_id(package_url)
             if binary_repository_type_id:
@@ -63,7 +63,7 @@ class PackagesMaintenanceReport:
                     binary_repository_id,
                 )
                 if package_id not in packages_maintenance_ids:
-                    missing_data_packages.append(package_url)
+                    missing_data_packages.add(package_url)
         return missing_data_packages
 
     def found_packages(self) -> List[PackagesMaintenanceReportRow]:
