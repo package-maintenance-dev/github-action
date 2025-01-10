@@ -76,8 +76,8 @@ This report provides brief information about current repository dependencies mai
 
 | Type | Id | Latest version | URLs | Release recency | Commits recency | Commits frequency | Issues lifetime | Issues open percentage | Pull requests lifetime | Pull requests open percentage |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| <code style="color: red">maven</code> | <code style="color: red">org.ehcache:ehcache</code> | <code>3.10.8</code> | [binary](https://mvnrepository.com/artifact/org.ehcache/ehcache) / [source](https://github.com/ehcache/ehcache3) | <code style="color: red">⚠</code> 25 / <code style="color: orange">C</code> | <code style="color: red">⚠</code> 5 / <code style="color: orange">C</code> |  31 / <code style="color: green">A</code> |  25 / <code style="color: orange">C</code> | `*` |  1 / <code style="color: yellow">B</code> | `*` |
-| <code>maven</code> | <code>org.springframework.boot:spring-boot-starter-web</code> | <code>3.4.1</code> | [binary](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web) / [source](https://github.com/spring-projects/spring-boot) |  0 / <code style="color: green">A</code> |  0 / <code style="color: green">A</code> |  1100 / <code style="color: green">A</code> |  6 / <code style="color: green">A</code> | `*` |  3 / <code style="color: orange">C</code> | `*` |
+| ❗ maven | ❗ org.ehcache:ehcache | <code>3.10.8</code> | [binary](https://mvnrepository.com/artifact/org.ehcache/ehcache) / [source](https://github.com/ehcache/ehcache3) | ❗ 25 / C 🟠 | ❗ 5 / C 🟠 |  31 / A 🟢 |  25 / C 🟠 | `*` |  1 / B 🟡 | `*` |
+|  maven |  org.springframework.boot:spring-boot-starter-web | <code>3.4.1</code> | [binary](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web) / [source](https://github.com/spring-projects/spring-boot) |  0 / A 🟢 |  0 / A 🟢 |  1100 / A 🟢 |  6 / A 🟢 | `*` |  3 / C 🟠 | `*` |
 
 ``*`` - Data is not available or is not enough to calculate a score;
 <code style="color: red">⚠</code> - A package maintenance score is below the threshold;

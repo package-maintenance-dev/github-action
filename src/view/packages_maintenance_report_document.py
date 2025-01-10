@@ -5,11 +5,21 @@ from src.clients.package_maintenance.model import MaintenanceMetric
 from src.models.packages_maintenance_report import PackagesMaintenanceReport
 from src.models.packages_maintenance_report_row import PackagesMaintenanceReportRow
 from src.view.markdown_document import MarkdownDocument
-from src.view.markdown_utils import render_colored_code, render_url, render_colored_code_conditionally, render_code
+from src.view.markdown_utils import render_url, render_code
 
 NA = "`*`"
-RED_WARNING = render_colored_code("⚠", "red")
+ERROR_SIGN = "❗"
+GREEN_MARK = "🟢"
+YELLOW_MARK = "🟡"
+ORANGE_MARK = "🟠"
+RED_MARK = "🔴"
 
+METRIC_SCORE_MARKS = {
+    "A": GREEN_MARK,
+    "B": YELLOW_MARK,
+    "C": ORANGE_MARK,
+    "D": RED_MARK,
+}
 
 class PackagesMaintenanceReportDocument:
     """
@@ -59,15 +69,16 @@ class PackagesMaintenanceReportDocument:
 
         report.table(headers=headers, rows=rows)
         report.text(f"`{NA}` - Data is not available or is not enough to calculate a score;")
-        report.text(f"{RED_WARNING} - A package maintenance score is below the threshold;")
+        report.text(f"{ERROR_SIGN} - A package maintenance score is below the threshold;")
 
     def _render_found_packages_row(self, row: PackagesMaintenanceReportRow) -> List[str]:
         below_threshold = row.is_maintenance_below_threshold()
         package = row.package
         binary_repository = package.binary_repository
 
-        type = render_colored_code_conditionally(binary_repository.type, "red", below_threshold)
-        id = render_colored_code_conditionally(binary_repository.id, "red", below_threshold)
+        row_mark = ERROR_SIGN if below_threshold else ""
+        type = f"{row_mark} {binary_repository.type}"
+        id = f"{row_mark} {binary_repository.id}"
         version = render_code(binary_repository.latest_version)
         urls = self._render_urls(row)
         release_recency = self._render_binary_release_recency(row)
@@ -152,30 +163,20 @@ class PackagesMaintenanceReportDocument:
         )
 
     def _render_maintenance_metric(
-        self,
-        metric: Optional[MaintenanceMetric],
-        slug: MaintenanceMetricSlug,
-        below_threshold_metrics: Set[MaintenanceMetricSlug],
+            self,
+            metric: Optional[MaintenanceMetric],
+            slug: MaintenanceMetricSlug,
+            below_threshold_metrics: Set[MaintenanceMetricSlug],
     ) -> str:
         if metric is None:
             return NA
 
         value = metric.value
         score = metric.score
-        score_color = ""
-        if score == "A":
-            score_color = "green"
-        if score == "B":
-            score_color = "yellow"
-        if score == "C":
-            score_color = "orange"
-        if score == "D":
-            score_color = "red"
-
-        score_rendered = render_colored_code(score, score_color)
+        score_mark = METRIC_SCORE_MARKS[score]
         below_threshold = slug in below_threshold_metrics
-        error_sign = RED_WARNING if below_threshold else ""
-        rendered_metric = f"{error_sign} {value} / {score_rendered}"
+        error_sign = ERROR_SIGN if below_threshold else ""
+        rendered_metric = f"{error_sign} {value} / {score} {score_mark}"
         return rendered_metric
 
     def _render_missing_packages(self, report):

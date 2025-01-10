@@ -95,7 +95,7 @@ run-docker-action-maven-example:
 run-docker-action-gradle-example:
 	docker run -e GITHUB_REPOSITORY=package-maintenance-dev/github-action-gradle-example pmd-github-action
 
-run-examples: run-action-maven-example
+run-examples: run-action-maven-example run-action-gradle-example
 
 #
 # Test: test action
