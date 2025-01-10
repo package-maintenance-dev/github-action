@@ -68,6 +68,7 @@ class PackagesMaintenanceReportDocument:
         rows = [self._render_found_packages_row(package) for package in self._report.found_packages()]
 
         report.table(headers=headers, rows=rows)
+        report.empty_line()
         report.text(f"`{NA}` - Data is not available or is not enough to calculate a score;")
         report.text(f"{ERROR_SIGN} - A package maintenance score is below the threshold;")
 
