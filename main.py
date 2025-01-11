@@ -1,4 +1,6 @@
 import argparse
+import logging
+import os
 
 from src.action import perform_action
 
@@ -32,8 +34,12 @@ def parse_arguments():
 
     return parser.parse_args()
 
+def set_logging():
+    log_level = getattr(logging, os.getenv('LOG_LEVEL', 'WARNING').strip().upper())
+    logging.basicConfig(level=log_level)
 
 def main():
+    set_logging()
     args = parse_arguments()
     perform_action(args)
 

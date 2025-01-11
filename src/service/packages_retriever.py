@@ -59,6 +59,7 @@ class PackagesRetriever:
         )
 
         packages_urls = self._get_packages_urls_to_check(sbom)
+        logger.info(f"Found {len(packages_urls)} packages to check.")
         return packages_urls
 
     def _get_packages_urls_to_check(self, sbom: SBOMResponse) -> List["PackageURL"]:
