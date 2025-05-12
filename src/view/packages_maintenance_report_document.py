@@ -21,6 +21,7 @@ METRIC_SCORE_MARKS = {
     "D": RED_MARK,
 }
 
+
 class PackagesMaintenanceReportDocument:
     """
     Represents a markdown document for a package maintenance report.
@@ -164,10 +165,10 @@ class PackagesMaintenanceReportDocument:
         )
 
     def _render_maintenance_metric(
-            self,
-            metric: Optional[MaintenanceMetric],
-            slug: MaintenanceMetricSlug,
-            below_threshold_metrics: Set[MaintenanceMetricSlug],
+        self,
+        metric: Optional[MaintenanceMetric],
+        slug: MaintenanceMetricSlug,
+        below_threshold_metrics: Set[MaintenanceMetricSlug],
     ) -> str:
         if metric is None:
             return NA

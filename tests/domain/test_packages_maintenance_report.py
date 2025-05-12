@@ -41,7 +41,7 @@ def test_missing_data_packages():
     missing = report.missing_data_packages()
 
     assert len(missing) == 1
-    assert missing[0].name == "example-package-2"
+    assert list(missing)[0].name == "example-package-2"
 
 
 def test_below_threshold_packages():
