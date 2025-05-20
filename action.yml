@@ -1,7 +1,6 @@
 name: Github action to find unsupported dependencies using package-maintenance.dev
 description: |-
-  This action finds unsupported dependencies in your project using package-maintenance.dev.
-  Found dependencies will be printed in the logs or result to failed execution depending on the action configuration.
+  Searches unsupported dependencies using package-maintenance.dev index and project SBOM.
 inputs:
   github-token:
     description: |-
