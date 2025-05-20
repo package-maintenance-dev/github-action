@@ -1,6 +1,9 @@
 name: Github action to find unsupported dependencies using package-maintenance.dev
 description: |-
   Searches unsupported dependencies using package-maintenance.dev index and project SBOM.
+branding:
+  icon: 'box'
+  color: 'green'
 inputs:
   github-token:
     description: |-
